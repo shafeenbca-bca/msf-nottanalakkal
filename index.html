@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MSF NOTTANALAKKAL</title>
+
+<style>
+:root{--green:#0a7a3d;--dark:#111;--light:#f4f4f4}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,Arial}
+body{background:#fff;color:#111}
+
+/* HEADER */
+header{
+  background:var(--green);color:#fff;padding:14px;
+  display:flex;justify-content:space-between;align-items:center;
+  position:sticky;top:0;z-index:1000
+}
+header .left{display:flex;align-items:center;gap:10px}
+header button{background:none;border:none;color:#fff;cursor:pointer}
+nav button{margin-left:6px}
+
+/* PAGES */
+.page{display:none;padding:70px 20px}
+.page.active{display:block}
+
+/* HERO */
+.hero{
+  background:linear-gradient(135deg,#0a7a3d,#0f9d58);
+  color:#fff;padding:90px 20px;text-align:center
+}
+
+/* BUTTONS */
+.btn{
+  background:#fff;color:var(--green);
+  padding:8px 16px;border-radius:20px;
+  border:none;cursor:pointer;margin:4px
+}
+.btn.danger{background:#e53935;color:#fff}
+
+/* CARDS */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:15px;margin-top:40px
+}
+.card{
+  background:var(--light);
+  padding:20px;border-radius:12px;
+  text-align:center;cursor:pointer
+}
+
+/* SECTION */
+.section{max-width:1100px;margin:auto;text-align:center}
+
+/* COMMITTEE */
+.committee{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:15px;margin-top:20px
+}
+.member{
+  background:var(--light);
+  padding:10px;border-radius:12px
+}
+.member img{
+  width:100%;height:140px;
+  object-fit:cover;border-radius:10px
+}
+
+/* NEWS */
+.news-item{
+  background:var(--light);
+  padding:12px;border-radius:10px;
+  margin:10px 0;text-align:left
+}
+
+/* MODAL */
+.modal{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.6);
+  justify-content:center;align-items:center;
+  z-index:2000
+}
+.modal-content{
+  background:#fff;padding:20px;
+  border-radius:12px;width:95%;
+  max-width:420px
+}
+.modal input,.modal textarea{
+  width:100%;padding:8px;margin:6px 0
+}
+
+footer{
+  background:var(--dark);color:#fff;
+  text-align:center;padding:15px;margin-top:40px
+}
+</style>
+</head>
+
+<body>
+
+<script>
+/* GOOGLE FORMS */
+const JOIN_FORM="PASTE_JOIN_FORM_LINK_HERE";
+const SUPPORT_FORM="PASTE_SUPPORT_FORM_LINK_HERE";
+
+/* ADMIN */
+const ADMIN_USER="admin";
+const ADMIN_PASS="msf@123";
+let isAdmin=false, editIndex=null;
+
+/* STORAGE */
+const getData=(k,d)=>JSON.parse(localStorage.getItem(k))||d;
+const setData=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+
+/* DEMO COMMITTEE */
+if(!localStorage.getItem("committee")){
+  setData("committee",[
+    {name:"Shafeen N",role:"President (പ്രസിഡന്റ്)",photo:""},
+    {name:"Muhammed Fazil",role:"Secretary (സെക്രട്ടറി)",photo:""},
+    {name:"Afsal K",role:"Treasurer (ട്രഷറർ)",photo:""}
+  ]);
+}
+</script>
+
+<header>
+  <div class="left">
+    <button onclick="goBack()">⬅</button>
+    <strong>MSF NOTTANALAKKAL</strong>
+  </div>
+  <nav>
+    <button onclick="openPage('home')">Home | ഹോം</button>
+    <button onclick="openPage('support')">Support | സഹായം</button>
+    <button onclick="openPage('news')">News | വാർത്തകൾ</button>
+    <button onclick="openPage('committee')">Committee | കമ്മിറ്റി</button>
+    <button onclick="openPage('join')">Join | ചേരുക</button>
+    <button onclick="openAdmin()">Admin</button>
+  </nav>
+</header>
+
+<!-- HOME -->
+<div id="home" class="page active">
+  <div class="hero">
+    <h1>MSF NOTTANALAKKAL</h1>
+    <p>Students’ rights & educational empowerment<br>
+    (വിദ്യാർത്ഥികളുടെ അവകാശത്തിനും വിദ്യാഭ്യാസത്തിനും വേണ്ടി)</p>
+  </div>
+
+  <div class="cards">
+    <div class="card" onclick="openPage('support')">🎒 Student Support<br>(വിദ്യാർത്ഥി സഹായം)</div>
+    <div class="card" onclick="openPage('news')">📰 News & Announcements<br>(വാർത്തകൾ)</div>
+    <div class="card" onclick="openPage('committee')">👥 Committee Members<br>(കമ്മിറ്റി)</div>
+    <div class="card" onclick="openPage('join')">🧑‍🤝‍🧑 Join MSF<br>(അംഗമാവുക)</div>
+  </div>
+</div>
+
+<!-- SUPPORT -->
+<div id="support" class="page">
+<div class="section">
+<h2>🎒 Student Support (വിദ്യാർത്ഥി സഹായം)</h2>
+<button class="btn" onclick="window.open(SUPPORT_FORM)">Request Help | സഹായം ആവശ്യപ്പെടുക</button>
+</div>
+</div>
+
+<!-- NEWS -->
+<div id="news" class="page">
+<div class="section">
+<h2>📰 News & Announcements (വാർത്തകളും അറിയിപ്പുകളും)</h2>
+<div id="newsBox"></div>
+</div>
+</div>
+
+<!-- COMMITTEE -->
+<div id="committee" class="page">
+<div class="section">
+<h2>👥 Committee Members (കമ്മിറ്റി അംഗങ്ങൾ)</h2>
+<div class="committee" id="committeeBox"></div>
+</div>
+</div>
+
+<!-- JOIN -->
+<div id="join" class="page">
+<div class="section">
+<h2>🧑‍🤝‍🧑 Join MSF (MSF-ൽ ചേരുക)</h2>
+<button class="btn" onclick="window.open(JOIN_FORM)">Join via Google Form</button>
+</div>
+</div>
+
+<!-- ADMIN LOGIN -->
+<div class="modal" id="adminModal">
+<div class="modal-content">
+<h3>🔐 Admin Login</h3>
+<input id="adminUser" placeholder="Username">
+<input id="adminPass" type="password" placeholder="Password">
+<button class="btn" onclick="loginAdmin()">Login</button>
+</div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="modal" id="adminPanel">
+<div class="modal-content">
+<h3>⚙ Admin Panel</h3>
+
+<h4>Add News (അറിയിപ്പ് ചേർക്കുക)</h4>
+<textarea id="newsInput"></textarea>
+<button class="btn" onclick="addNews()">Add</button>
+
+<h4>Committee Member (കമ്മിറ്റി അംഗം)</h4>
+<input id="memberName" placeholder="Name">
+<input id="memberRole" placeholder="Role">
+<input type="file" id="memberPhoto" accept="image/*">
+<button class="btn" onclick="saveMember()">Save</button>
+
+<button class="btn" onclick="closeAdmin()">⬅ Back</button>
+<button class="btn danger" onclick="logoutAdmin()">Logout</button>
+</div>
+</div>
+
+<footer>© MSF NOTTANALAKKAL</footer>
+
+<script>
+let historyStack=["home"],current="home";
+
+/* NAV */
+function openPage(id){
+  historyStack.push(current);
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  current=id;
+}
+function goBack(){
+  if(historyStack.length>1){
+    historyStack.pop();
+    openPage(historyStack.pop());
+  }
+}
+
+/* ADMIN */
+function openAdmin(){adminModal.style.display="flex"}
+function closeAdmin(){adminPanel.style.display="none"}
+function loginAdmin(){
+  if(adminUser.value===ADMIN_USER && adminPass.value===ADMIN_PASS){
+    isAdmin=true;
+    adminModal.style.display="none";
+    adminPanel.style.display="flex";
+    renderMembers();renderNews();
+  }else alert("Wrong login");
+}
+function logoutAdmin(){isAdmin=false;adminPanel.style.display="none"}
+
+/* NEWS */
+function addNews(){
+  const n=getData("news",[]);
+  n.unshift(newsInput.value);
+  setData("news",n);
+  newsInput.value="";
+  renderNews();
+}
+function renderNews(){
+  newsBox.innerHTML="";
+  getData("news",[]).forEach((n,i)=>{
+    newsBox.innerHTML+=`
+    <div class="news-item">
+      ${n}
+      ${isAdmin?`<button class="btn danger" onclick="deleteNews(${i})">Delete</button>`:""}
+    </div>`;
+  });
+}
+function deleteNews(i){
+  const n=getData("news",[]);
+  n.splice(i,1);setData("news",n);renderNews();
+}
+
+/* COMMITTEE */
+function renderMembers(){
+  committeeBox.innerHTML="";
+  getData("committee",[]).forEach((m,i)=>{
+    committeeBox.innerHTML+=`
+    <div class="member">
+      <img src="${m.photo||'https://i.pravatar.cc/300?img='+(i+10)}">
+      <h4>${m.name}</h4>
+      <small>${m.role}</small><br>
+      ${isAdmin?`
+        <button class="btn" onclick="editMember(${i})">Edit</button>
+        <button class="btn danger" onclick="deleteMember(${i})">Delete</button>`:""}
+    </div>`;
+  });
+}
+function editMember(i){
+  const m=getData("committee",[])[i];
+  memberName.value=m.name;
+  memberRole.value=m.role;
+  editIndex=i;
+}
+function saveMember(){
+  const data=getData("committee",[]);
+  const file=memberPhoto.files[0];
+  if(file){
+    const r=new FileReader();
+    r.onload=e=>{
+      data[editIndex??data.length]={name:memberName.value,role:memberRole.value,photo:e.target.result};
+      setData("committee",data);resetForm();renderMembers();
+    };
+    r.readAsDataURL(file);
+  }else{
+    data[editIndex??data.length]={name:memberName.value,role:memberRole.value,photo:""};
+    setData("committee",data);resetForm();renderMembers();
+  }
+}
+function deleteMember(i){
+  const d=getData("committee",[]);
+  d.splice(i,1);setData("committee",d);renderMembers();
+}
+function resetForm(){
+  memberName.value="";memberRole.value="";
+  memberPhoto.value="";editIndex=null;
+}
+
+renderMembers();renderNews();
+</script>
+
+</body>
+</html>
